@@ -48,8 +48,8 @@
   [the-maze floor position]
   ;; If we have reached the most east, west, north or south side of the maze, then we are at the exit.
   (or
-    (or (= 0 floor) (= floor (dec (count the-maze))))
-    (or (= 0 position) (= position (dec (count (the-maze floor)))))))
+    (= 0 floor) (= floor (dec (count the-maze)))
+    (= 0 position) (= position (dec (count (the-maze floor))))))
 
 ;; We can go right if our position does not exceed the boundaries of the maze AND we cannot step on an "x".
 (defn can-go-right?
