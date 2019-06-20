@@ -27,7 +27,7 @@
 
 (defn get-start-position
   "Checks a floor vector and returns the index of the start marker(*), if it can be found and -1 otherwise."
-  [floor-vector]
+  [^clojure.lang.PersistentVector floor-vector]
   (.indexOf floor-vector "*"))
 
 (defn get-start-floor
