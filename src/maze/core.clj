@@ -4,7 +4,7 @@
 (defn read-ds-from-file
   "Read a Clojure data structure from a file"
   [fname]
-  (read-string (slurp fname)))
+  (clojure.edn/read-string (slurp fname)))
 
 ;; The maze we need to traverse is read from a file.
 ;; The maze looks like this:
