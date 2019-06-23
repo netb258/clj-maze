@@ -1,9 +1,0 @@
-;; The maze can be edited from here.
-;; Paths with "x" are blocked. The start position is at "*".
-
-[["x" "x" "x" "x" "x" "x"]
- ["0" "x" "0" "0" "0" "x"]
- ["x" "*" "0" "x" "0" "x"]
- ["x" "x" "x" "x" "0" "0"]
- ["0" "0" "0" "0" "0" "x"]
- ["x" "x" "x" "x" "0" "x"]]
