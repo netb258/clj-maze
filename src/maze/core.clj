@@ -1,22 +1,32 @@
 (ns maze.core
+  (:require [clojure.string :as str])
   (:gen-class))
 
-(defn read-ds-from-file
-  "Read a Clojure data structure from a file"
-  [fname]
-  (clojure.edn/read-string (slurp fname)))
-
-;; The maze we need to traverse is read from a file.
-;; The maze looks like this:
-;; [["x" "x" "x" "x" "x" "x"]
-;;  ["0" "x" "0" "0" "0" "x"]
-;;  ["x" "*" "0" "x" "0" "x"]
-;;  ["x" "x" "x" "x" "0" "0"]
-;;  ["0" "0" "0" "0" "0" "x"]
-;;  ["x" "x" "x" "x" "0" "x"]]
+;; The maze sits in a file and looks like this:
+;; xxxxxx
+;; 0x000x
+;; x*0x0x
+;; xxxx00
+;; 00000x
+;; xxxx0x
 ;; Paths with "x" are blocked. The start position is at "*".
-(def maze
-  (read-ds-from-file "maze"))
+(def maze-filename "maze.txt")
+
+;; We will need to parse the maze as clojure data.
+;; The end result should be a matrix like this:
+;; [[\x \x \x \x \x \x]
+;;  [\0 \x \0 \0 \0 \x]
+;;  [\x \* \0 \x \0 \x]
+;;  [\x \x \x \x \0 \0]
+;;  [\0 \0 \0 \0 \0 \x]
+;;  [\x \x \x \x \0 \x]]
+(defn parse-maze [maze-str]
+  (->> maze-str
+       str/trim
+       str/split-lines
+       (mapv (partial into []))))
+
+(def maze (-> maze-filename slurp parse-maze))
 
 ;; This function will walk the maze, with the help of other little functions.
 (declare walk-maze the-maze floor position steps)
@@ -28,7 +38,7 @@
 (defn get-start-position
   "Checks a floor vector and returns the index of the start marker(*), if it can be found and -1 otherwise."
   [^clojure.lang.PersistentVector floor-vector]
-  (.indexOf floor-vector "*"))
+  (.indexOf floor-vector \*))
 
 (defn get-start-floor
   "Checks the maze matrix and gets the vector which contains the start position marker(*)."
@@ -56,28 +66,28 @@
   [the-maze floor position]
   (and
     (< (inc position) (count (the-maze floor)))
-    (= "0" (get (the-maze floor) (inc position)))))
+    (= \0 (get (the-maze floor) (inc position)))))
 
 ;; We can go up if our floor does not pass floor 0 (it is the highest floor) AND we cannot step on an "x".
 (defn can-go-up?
   [the-maze floor position]
   (and
     (> (dec floor) -1)
-    (= "0" (get (the-maze (dec floor)) position))))
+    (= \0 (get (the-maze (dec floor)) position))))
 
 ;; We can go left if our position does not pass position 0 (it is the leftmost position) AND we cannot step on an "x".
 (defn can-go-left?
   [the-maze floor position]
   (and
     (> (dec position) -1)
-    (= "0" (get (the-maze floor) (dec position)))))
+    (= \0 (get (the-maze floor) (dec position)))))
 
 ;; We can go down if our floor does not exceed the boundaries of the maze AND we cannot step on an "x".
 (defn can-go-down?
   [the-maze floor position]
   (and
     (< (inc floor) (count the-maze))
-    (= "0" (get (the-maze (inc floor)) position))))
+    (= \0 (get (the-maze (inc floor)) position))))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 ;; -------------------------------------- Functions to actually move in the maze -------------------------------------
