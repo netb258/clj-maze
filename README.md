@@ -13,10 +13,15 @@ The start position is at "*".
 A full maze looks like this:
 
 xxxxxx
+
 0x000x
+
 x*0x0x
+
 xxxx00
+
 00000x
+
 xxxx0x
 
 # Running the program
